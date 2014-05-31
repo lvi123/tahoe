@@ -54,7 +54,7 @@ class TestLaCrosseAlerts(unittest.TestCase):
         conn.login(self.username, self.password)
         try:
             jdata = conn.getLatestObservationJSON(self.bogus_sensor_id)
-            self.fail("Request for observations for sensor %d should have failed" % self.bogus_sensor_id)
+            self.fail("Request for observations for sensor %d should have failed!" % self.bogus_sensor_id)
         except RequestError:
             print("Request for observations for sensor %d failed as expected" % self.bogus_sensor_id)
         finally:
@@ -65,7 +65,7 @@ class TestLaCrosseAlerts(unittest.TestCase):
         conn.login(self.bogus_username, self.bogus_password)
         try:
             jdata = conn.getLatestObservationJSON(self.sensor_id)
-            self.fail("Request for observations using username \'%s' should have failed" % self.bogus_username )
+            self.fail("Request for observations using username \'%s' should have failed!" % self.bogus_username )
         except RequestError:
             print("Request for observations using username \'%s\' failed as expected" % self.bogus_username )
         finally:
