@@ -9,25 +9,25 @@ class TestDB(unittest.TestCase):
     
     def setUp(self):
         config = ConfigParser.ConfigParser()
-        config.read("test/test.conf")
+        config.read('test/test.conf')
 
         self.db_config = {
-            "user" : config.get("db", "user"),
-            "password" : config.get("db", "password"),
-            "host" : config.get("db", "host"),
-            "database" : config.get("db", "database")
+            'user' : config.get('db', 'user'),
+            'password' : config.get('db', 'password'),
+            'host' : config.get('db', 'host'),
+            'database' : config.get('db', 'database')
             }
 
-        self.bogus_user = "foo"
-        self.bogus_password = "bar"
+        self.bogus_user = 'foo'
+        self.bogus_password = 'bar'
 
-        self.debug_serial = config.get("db", "debug_serial")
+        self.debug_serial = config.get('db', 'debug_serial')
 
-        self.delete_obs = ("DELETE FROM obs where serial = %(serial)s")
+        self.delete_obs = ('DELETE FROM obs where serial = %(serial)s')
 
-        self.insert_obs = ("INSERT INTO obs "
-                           "(serial, timestamp, temp, temp2, rh, lowbatt, linkquality) "
-                           "VALUES (%(serial)s, FROM_UNIXTIME(%(timestamp)s), %(temp)s, %(temp2)s, %(rh)s, %(lowbatt)s, %(linkquality)s)")
+        self.insert_obs = ('INSERT INTO obs '
+                           '(serial, timestamp, temp, temp2, rh, lowbatt, linkquality) '
+                           'VALUES (%(serial)s, FROM_UNIXTIME(%(timestamp)s), %(temp)s, %(temp2)s, %(rh)s, %(lowbatt)s, %(linkquality)s)')
 
     def testLogin(self):
         cnx = mysql.connector.connect(**self.db_config);
@@ -37,12 +37,12 @@ class TestDB(unittest.TestCase):
         try:
             cnx = mysql.connector.connect(user = self.bogus_user,
                                           password = self.bogus_password,
-                                          host = self.db_config["host"],
-                                          database = self.db_config["database"])
-            self.fail("DB connection for user \'%s\' should have failed!" % self.bogus_user)
+                                          host = self.db_config['host'],
+                                          database = self.db_config['database'])
+            self.fail("DB connection for user '%s' should have failed!" % self.bogus_user)
         except mysql.connector.Error as err:
             self.assertEqual(err.errno, errorcode.ER_ACCESS_DENIED_ERROR)
-            print "DB connection for user \'%s\' failed as expected" % self.bogus_user
+            print "DB connection for user '%s' failed as expected" % self.bogus_user
 
     def deleteDebugObs(self, cnx):
         cursor = cnx.cursor()
@@ -51,13 +51,13 @@ class TestDB(unittest.TestCase):
 
     def makeDebugObs(self, timestamp):
         obs = {
-            "serial" : self.debug_serial,
-            "timestamp" : timestamp,
-            "temp" : "60",
-            "temp2" : "70",
-            "rh" : "50",
-            "lowbatt" : 0,
-            "linkquality" : 100
+            'serial' : self.debug_serial,
+            'timestamp' : timestamp,
+            'temp' : '60',
+            'temp2' : '70',
+            'rh' : '50',
+            'lowbatt' : 0,
+            'linkquality' : 100
             }
         return obs
 
@@ -83,14 +83,14 @@ class TestDB(unittest.TestCase):
         except mysql.connector.Error as err:
             if err.errno != errorcode.ER_DUP_ENTRY:
                 raise err
-            print "Encountered a dup while executing %d statements: %s" % (len(data), err)
+            print 'Encountered a dup while executing %d statements: %s' % (len(data), err)
             for datum in data:
                 try:
                     cursor.execute(stmt, datum)
                 except mysql.connector.Error as err:
                     if err.errno != errorcode.ER_DUP_ENTRY:
                         raise err
-                    print "Encountered a dup while executing a statement: %s" % err
+                    print 'Encountered a dup while executing a statement: %s' % err
 
     def testInsertDuplicates(self):
         cnx = mysql.connector.connect(**self.db_config);

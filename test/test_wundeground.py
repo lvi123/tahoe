@@ -8,12 +8,12 @@ class TestLaCrosseAlerts(unittest.TestCase):
     
     def setUp(self):
         config = ConfigParser.ConfigParser()
-        config.read("test/test.conf")
+        config.read('test/test.conf')
 
-        self.url = config.get("wunderground", "url")
-        self.station_id = config.get("wunderground", "station_id")
-        self.day = datetime.datetime.strptime(config.get("wunderground", "day"), "%m/%d/%Y")
-        self.year = config.getint("wunderground", "year")
+        self.url = config.get('wunderground', 'url')
+        self.station_id = config.get('wunderground', 'station_id')
+        self.day = datetime.datetime.strptime(config.get('wunderground', 'day'), '%m/%d/%Y')
+        self.year = config.getint('wunderground', 'year')
     
     def testGetObservationsForDay(self):
         conn = WeatherUndegroundConnection(self.url)
