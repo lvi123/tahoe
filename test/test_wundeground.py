@@ -4,7 +4,7 @@ import unittest
 
 from wunderground import WeatherUndegroundConnection
 
-class TestLaCrosseAlerts(unittest.TestCase):
+class TestWundeground(unittest.TestCase):
     
     def setUp(self):
         config = ConfigParser.ConfigParser()
@@ -15,14 +15,14 @@ class TestLaCrosseAlerts(unittest.TestCase):
         self.day = datetime.datetime.strptime(config.get('wunderground', 'day'), '%m/%d/%Y')
         self.year = config.getint('wunderground', 'year')
     
-    def testGetObservationsForDay(self):
+    def test_get_observations_for_day(self):
         conn = WeatherUndegroundConnection(self.url)
-        result = conn.getObservationsForDay(self.station_id, self.date)
+        result = conn.get_observations_for_day(self.station_id, self.day)
         print result
 
-    def testGetObservationsForYear(self):
+    def test_get_observations_for_year(self):
         conn = WeatherUndegroundConnection(self.url)
-        result = conn.getObservationsForYear(self.station_id, self.year)
+        result = conn.get_observations_for_year(self.station_id, self.year)
         print result
 
 if __name__ == '__main__':

@@ -29,11 +29,11 @@ class TestDB(unittest.TestCase):
                            '(serial, timestamp, temp, temp2, rh, lowbatt, linkquality) '
                            'VALUES (%(serial)s, FROM_UNIXTIME(%(timestamp)s), %(temp)s, %(temp2)s, %(rh)s, %(lowbatt)s, %(linkquality)s)')
 
-    def testLogin(self):
+    def test_login(self):
         cnx = mysql.connector.connect(**self.db_config);
         cnx.close
 
-    def testLoginFailWrongCredentials(self):
+    def test_login_fail_wrong_credentials(self):
         try:
             cnx = mysql.connector.connect(user = self.bogus_user,
                                           password = self.bogus_password,
@@ -44,12 +44,12 @@ class TestDB(unittest.TestCase):
             self.assertEqual(err.errno, errorcode.ER_ACCESS_DENIED_ERROR)
             print "DB connection for user '%s' failed as expected" % self.bogus_user
 
-    def deleteDebugObs(self, cnx):
+    def delete_debug_obs(self, cnx):
         cursor = cnx.cursor()
         cursor.execute(self.delete_obs, {'serial' : self.debug_serial})
         cnx.commit()
 
-    def makeDebugObs(self, timestamp):
+    def make_debug_obs(self, timestamp):
         obs = {
             'serial' : self.debug_serial,
             'timestamp' : timestamp,
@@ -61,16 +61,16 @@ class TestDB(unittest.TestCase):
             }
         return obs
 
-    def testInsert(self):
+    def test_insert(self):
         cnx = mysql.connector.connect(**self.db_config);
         try:
-            self.deleteDebugObs(cnx)
+            self.delete_debug_obs(cnx)
             cursor = cnx.cursor()
             timestamp = int(time.time())
             for i in range (0,500):
                 obs_data = []
                 for j in range (0,100):
-                    obs_data.append(self.makeDebugObs(timestamp))
+                    obs_data.append(self.make_debug_obs(timestamp))
                     timestamp += 1
                 cursor.executemany(self.insert_obs, obs_data)
             cnx.commit()
@@ -92,16 +92,16 @@ class TestDB(unittest.TestCase):
                         raise err
                     print 'Encountered a dup while executing a statement: %s' % err
 
-    def testInsertDuplicates(self):
+    def test_insert_duplicates(self):
         cnx = mysql.connector.connect(**self.db_config);
         try:
-            self.deleteDebugObs(cnx)
+            self.delete_debug_obs(cnx)
             cursor = cnx.cursor()
             timestamp = int(time.time())
             for i in range (0,5000):
                 obs_data = []
                 for j in range (0,10):
-                    obs_data.append(self.makeDebugObs(timestamp))
+                    obs_data.append(self.make_debug_obs(timestamp))
                     if not (i == 10 and j == 5):
                         timestamp += 1            
                 self.executemany_safe(cursor, self.insert_obs, obs_data)

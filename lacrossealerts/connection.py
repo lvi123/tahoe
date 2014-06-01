@@ -34,22 +34,22 @@ class LaCrosseAlertsConnection:
         url = self.url + '/logout'
         self.opener.open(url)
 
-    def makeObservationQueryURL(self, sensor_id):
+    def __make_observation_query_URL(self, sensor_id):
         return self.url + '/v1/observations/%d?format=json' % sensor_id
 
-    def getAllObservationsJSON(self, sensor_id):
-        url = self.makeObservationQueryURL(sensor_id) + '&from=-100years'
-        return self.getObservationsJSON(url)
+    def get_all_observations_JSON(self, sensor_id):
+        url = self.__make_observation_query_URL(sensor_id) + '&from=-100years'
+        return self.__get_observations_JSON(url)
 
-    def getLatestObservationJSON(self, sensor_id):
-        url = self.makeObservationQueryURL(sensor_id)
-        return self.getObservationsJSON(url)
+    def get_latest_observation_JSON(self, sensor_id):
+        url = self.__make_observation_query_URL(sensor_id)
+        return self.__get_observations_JSON(url)
         
-    def getObservationsJSON(self, url):
+    def __get_observations_JSON(self, url):
         jdata = json.load(self.opener.open(url))
-        return self.validateAndTransform(url, jdata)
+        return self.__validate_and_transform(url, jdata)
 
-    def validateAndTransform(self, url, jdata):
+    def __validate_and_transform(self, url, jdata):
         if not ('success' in jdata and jdata['success']):
             raise RequestError(url)
         response = jdata['response']
