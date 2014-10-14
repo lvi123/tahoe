@@ -1,4 +1,5 @@
 import ConfigParser
+import httplib
 import json
 import unittest
 
