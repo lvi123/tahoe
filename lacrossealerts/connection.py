@@ -16,11 +16,12 @@ class NoRedirection(urllib2.HTTPErrorProcessor):
 
 class LaCrosseAlertsConnection:
 
-    def __init__(self, url = 'https://www.lacrossealerts.com'):
+    def __init__(self, url = 'https://www.lacrossealerts.com', debuglevel=0):
         self.url = url
         cj = cookielib.CookieJar()
         self.opener = urllib2.build_opener(NoRedirection,
-                                           urllib2.HTTPCookieProcessor(cj))
+                                           urllib2.HTTPCookieProcessor(cj),
+                                           urllib2.HTTPSHandler(debuglevel))
 
     def login(self, username, password):
         form = {
