@@ -5,6 +5,9 @@ stuff
 Git:
 git config --global user.name lvi123
 git config --global user.email lvi123@xxx.com
+git config --global credential.helper store
+#git config --global credential.helper osxkeychain
+
 git clone https://github.com/lvi123/tahoe.git
 
 MAC:
